@@ -26,6 +26,12 @@ jobs:
     - name: Create function.zip
       run: zip -r function.zip . -x "node_modules/*" ".git/*"
 
+    - name: Upload function.zip as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: function-zip
+        path: function.zip
+
   deploy:
     name: Deploy to AWS Lambda
     runs-on: ubuntu-latest
@@ -48,5 +54,5 @@ jobs:
 
     - name: Deploy to AWS Lambda
       run: |
-        aws lambda update-function-code --function-name my-function \
+        aws lambda update-function-code --function-name my-test-function \
           --zip-file fileb://function.zip
