@@ -31,7 +31,7 @@ jobs:
       with:
         name: function-zip
         path: function.zip
-        
+
     - name: Configure AWS credentials
       run: |
         aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID_ROHEM }}
@@ -47,5 +47,5 @@ jobs:
 
     - name: Deploy to AWS Lambda
       run: |
-        aws lambda update-function-code --function-name my-test-function \
+        aws lambda update-function-code --function-name aws-test-function-rohem \
           --zip-file fileb://function.zip
