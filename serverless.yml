@@ -1,0 +1,33 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: prohem
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: lambda-test
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: lambda-test
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: us-east-1
+
+functions:
+  helloWorld:
+    handler: handler.helloWorld
+    events:
+      - http:
+          path: hello
+          method: get
+
+  sum:
+    handler: handler.sum
+    events:
+      - http:
+          path: sum
+          method: get
+
+  currentTime:
+    handler: handler.currentTime
+    events:
+      - http:
+          path: time
+          method: get
