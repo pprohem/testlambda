@@ -7,6 +7,8 @@ provider:
   name: aws
   runtime: nodejs20.x
   region: us-east-1
+  deploymentBucket:
+    name: lambda-test-bucket-rohem 
 
 functions:
   helloWorld:
