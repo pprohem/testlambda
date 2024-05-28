@@ -6,7 +6,7 @@ service: lambda-test
 provider:
   name: aws
   runtime: nodejs20.x
-  region: us-east-1
+  region: us-east-2
   deploymentBucket:
     name: lambda-test-bucket-rohem 
 
