@@ -19,9 +19,18 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Load environment variables from JSON secret
+      id: load-env
       run: |
+        # Salvar o conteúdo do secret em um arquivo JSON
         echo "${{ secrets.ENV_VARS_JSON }}" > env_vars.json
+        
+        # Debug: Imprimir o conteúdo do arquivo JSON para verificar
+        cat env_vars.json
+        
+        # Carregar variáveis de ambiente a partir do JSON
         ENV_VARS=$(jq -r 'to_entries | map("\(.key)=\(.value|tostring)") | .[]' env_vars.json)
+        
+        # Debug: Imprimir as variáveis de ambiente carregadas
         echo "$ENV_VARS" >> $GITHUB_ENV
 
     - name: Print last 5 environment variables
