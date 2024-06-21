@@ -28,7 +28,7 @@ jobs:
     - name: Save secret content to JSON file
       run: echo "${{ secrets.ENV_VARS_JSON }}" > env_vars.json
 
-    - name: Debug: Print content of env_vars.json
+    - name: Print content of env_vars.json
       run: cat env_vars.json
 
     - name: Load environment variables from JSON
@@ -37,7 +37,7 @@ jobs:
         ENV_VARS=$(jq -r 'to_entries | map("\(.key)=\(.value|tostring)") | .[]' env_vars.json)
         echo "$ENV_VARS" >> $GITHUB_ENV
 
-    - name: Debug: Print loaded environment variables
+    - name:  Print loaded environment variables
       run: |
         echo "Loaded environment variables:"
         cat $GITHUB_ENV
