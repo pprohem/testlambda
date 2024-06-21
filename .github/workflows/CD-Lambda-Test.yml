@@ -21,21 +21,17 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Print secret content for debugging
-      run: echo "${{ secrets.ENV_VARS_JSON }}"
-
-    - name: Save secret content to JSON file
-      run: echo "${{ secrets.ENV_VARS_JSON }}" > env_vars.json
-
-    - name: Print content of env_vars.json
-      run: cat env_vars.json
-
-    - name: Load environment variables from JSON
-      id: load-env
+    - name: Load environment variables from YAML secret
+      env:
+        ENV_VARS_YML: ${{ secrets.ENV_VARS_YML_DEV }}
       run: |
-        cat env_vars.json | jq -r 'to_entries | map("\(.key)=\(.value|tostring)") | .[]' >> $GITHUB_ENV || echo "Failed to load environment variables"
+        echo "$ENV_VARS_YML" > env_vars.yml
+        while IFS=': ' read -r key value; do
+          echo "Setting $key=$value"
+          echo "$key=$value" >> $GITHUB_ENV
+        done < env_vars.yml
 
-    - name:  Print loaded environment variables
+    - name: Print loaded environment variables
       run: |
         echo "Loaded environment variables:"
         cat $GITHUB_ENV
