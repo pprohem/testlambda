@@ -7,6 +7,13 @@ provider:
   name: aws
   runtime: nodejs20.x
   region: us-east-2
+  environment:
+    ENV1: ${env:ENV1}
+    ENV2: ${env:ENV2}
+    HOST: ${env:HOST}
+    PORT: ${env:PORT}
+    DATABASE_URL: ${env:DATABASE_URL}
+    API_KEY: ${env:API_KEY}
 
 functions:
   helloWorld:
