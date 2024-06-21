@@ -20,8 +20,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Load environment variables from JSON secret
       run: |
-        SECRET_NAME="ENV_VARS_JSON"
-        echo "${{ secrets[SECRET_NAME] }}" > env_vars.json
+        echo "${{ secrets.ENV_VARS_JSON }}" > env_vars.json
         ENV_VARS=$(jq -r 'to_entries | map("\(.key)=\(.value|tostring)") | .[]' env_vars.json)
         echo "$ENV_VARS" >> $GITHUB_ENV
 
