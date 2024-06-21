@@ -21,24 +21,19 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Load environment variables from YAML secret
+    - name: Load and parse environment variables from YAML secret
       env:
-        ENV_VARS_YML: ${{ secrets.ENV_VARS_YML_DEV }}
+        ENV_VARS_YAML: ${{ secrets.ENV_VARS_YML_DEV }}
       run: |
-        echo "$ENV_VARS_YML" > env_vars.yml
+        echo "$ENV_VARS_YAML" > env_vars.yml
         while IFS=': ' read -r key value; do
-          echo "Setting $key=$value"
-          echo "$key=$value" >> $GITHUB_ENV
+          echo "Setting $key=$value in .env file"
+          echo "$key=$value" >> .env
         done < env_vars.yml
 
-    - name: Print loaded environment variables
+    - name: Debug: Print .env file content
       run: |
-        echo "Loaded environment variables:"
-        cat $GITHUB_ENV
-
-    - name: Print last 5 environment variables
-      run: |
-        tail -n 5 $GITHUB_ENV
+        cat .env
     - run: npm ci
     - name: Serverless Deploy in AWS
       env: 
