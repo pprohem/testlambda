@@ -31,7 +31,7 @@ jobs:
           echo "$key=$value" >> .env
         done < env_vars.yml
 
-    - name: Debug: Print .env file content
+    - name: Print .env file content
       run: |
         cat .env
     - run: npm ci
