@@ -21,23 +21,22 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Create .env file from secret
+    - name: Load and parse environment variables from YAML secret
       env:
-        TEST_SECRET_ENV: ${{ secrets.TEST_ENV_DEV }}
+        ENV_VARS_YAML: ${{ secrets.TESTE_ENV_DEV }}
       run: |
-        # Define o arquivo .env
-        env_file=".env"
-        touch $env_file
+        echo "$ENV_VARS_YAML" > env_vars.yml
+        while IFS=': ' read -r key value; do
+          echo "Setting $key=$value in .env file"
+          echo "$key=$value" >> .env
+        done < env_vars.yml
 
-        # Lê o conteúdo do segredo TEST_SECRET_ENV e grava no arquivo .env
-        echo "$TEST_SECRET_ENV" | while IFS=': ' read -r key value; do
-          key=$(echo $key | xargs)  # Remove espaços em torno da chave
-          value=$(echo $value | xargs | sed 's/^"//;s/"$//')  # Remove espaços e aspas em torno do valor
-          echo "$key=$value" >> $env_file
-        done
-
-        # Exibe o conteúdo do arquivo .env para verificação
-        cat $env_file
+    - name: Print .env file content
+      run: |
+        cat .env
+    - name: List directory contents
+      run: |
+        ls -al
     - run: npm ci
     - name: Serverless Deploy in AWS
       env: 
