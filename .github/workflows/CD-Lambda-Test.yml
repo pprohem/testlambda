@@ -12,6 +12,7 @@ jobs:
     strategy:
       matrix:
         node-version: [20.x]
+    environment: prod
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
@@ -41,29 +42,13 @@ jobs:
 
     - run: npm ci
 
-    - name: Approve Deployment to Production
-      if: ${{ github.ref == 'refs/heads/main' }}
-      uses: actions/github-script@v6
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          if ('${{ github.ref }}' === 'refs/heads/main') {
-            await github.repos.createDeployment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: context.sha,
-              environment: 'prod',
-              required_contexts: [],
-              transient_environment: false,
-              auto_merge: false
-            });
-          }
+  
 
-    - name: Serverless Deploy in AWS
-      if: ${{ github.ref != 'refs/heads/main' || github.event.deployment_status.state == 'success' }}
-      env: 
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_ROHEM }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_ROHEM }}
-      run: |
-        npm i -g serverless@3.x
-        serverless deploy --stage dev
+    # - name: Serverless Deploy in AWS
+    #   if: ${{ github.ref != 'refs/heads/main' || github.event.deployment_status.state == 'success' }}
+    #   env: 
+    #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_ROHEM }}
+    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_ROHEM }}
+    #   run: |
+    #     npm i -g serverless@3.x
+    #     serverless deploy --stage dev
